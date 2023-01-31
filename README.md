@@ -1,7 +1,7 @@
 # NetSpeed Monitor
 python based GUI that shows per second upload, download speed from the JSON endpoint provided by ns_daemon.
 
-Since the daemon and GUI are separate apps you can close and reopen the GUI as desired. For eg when you are doing some work that requires the full screen real estate.
+Since the daemon and GUI are separate apps you can close and reopen the GUI as desired. For eg when you are doing some work that requires the whole screen estate available.
 
 Upload and Download speed updates every 1s, the total is updated every 60s.
 
