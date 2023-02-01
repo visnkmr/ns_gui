@@ -9,7 +9,7 @@ Upload and Download speed updates every 1s, the total is updated every 60s.
 
 Once you have [ns_daemon](https://github.com/visnkmr/ns_daemon) up and running. 
 
-Download the executable available under [releases](https://github.com/visnkmr/ns_gui/releases/latest) section (for Linux, Windows) or the source code using your locally installed version of python using 
+Download the executable available under [releases section (for Linux, Windows)](https://github.com/visnkmr/ns_gui/releases/latest) or the source code using your locally installed version of python using 
 
 `pip install -r requirements.txt`
 
