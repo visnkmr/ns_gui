@@ -61,8 +61,10 @@ label_total_usage.grid(row=0, column=2)
 # Updating Labels
 def update():
     global last_upload, last_download, upload_speed, down_speed
+    # print("reached update")
     try:
-        response_API = requests.get('http://localhost:6798/')
+        # print("started trying")
+        response_API = requests.get('http://localhost:6798/',timeout = 0.0000000001)
         data = response_API.text
         parse_json = json.loads(data)
         upload = parse_json[0]
@@ -87,13 +89,16 @@ def update():
         # {} {}↑ {}
         label_total_usage["text"] = f'{size(down_speed,False)}ps↓ {size(upload_speed,False)}ps↑ {size(todaytotal,True)}'
         label_total_usage.grid(row=0, column=2)
-    except requests.exceptions.RequestException as e:
-        label_total_usage["text"] = f'Ensure tnsoverlaydaemon is working.'
+    except Exception as e:
+        # print(e)
+        label_total_usage["text"] = f'Pls ensure that ns_daemon is running on your machine by browsing http://localhost:6798/ from your browser.'
         label_total_usage.grid(row=0, column=2)
         # raise SystemExit(e)
+        # window.update()
+        #print("test")
     window.after(REFRESH_DELAY, update)  # reschedule event in refresh delay.
 
-
+#print("test")
 window.after(REFRESH_DELAY, update)
 
 window.overrideredirect(True)
