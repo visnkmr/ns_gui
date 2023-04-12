@@ -1,6 +1,7 @@
 # ns_gui.py
 # Written by: https://visnkmr.github.io
 
+import time
 import tkinter as tk
 # import requests
 import json
@@ -15,16 +16,34 @@ message_queue = queue.Queue()
 stop_event = threading.Event()
 
 def sse_loop(url):
-    # This function runs on a separate thread and receives messages from SSEClient
-    messages = sseclient.SSEClient(url)
-    for msg in messages:
-        print(json.loads(msg.data))
-        # Put the message data into the queue
-        message_queue.put(msg.data)
-     # Check if the stop event is set
+    # This function runs on a separate thread and handles SSE
+    # Initialize a variable to store the last event id
+    last_event_id = None
+    # Use a while loop to recheck for SSE connections until the window is closed
+    while True:
+        # Check if the stop event is set
         if stop_event.is_set():
             # Break out of the loop and stop the thread
             break
+        try:
+            # Create the SSEClient object with the URL, the last event id and the retry value
+            messages = sseclient.SSEClient(url, retry=5000)
+            # Iterate over the messages
+            for msg in messages:
+                print(json.loads(msg.data))
+                # Put the message data into the queue
+                message_queue.put(msg.data)
+                # Check if the stop event is set
+                if stop_event.is_set():
+                    # Break out of the loop and stop the thread
+                    break
+                # Update the last event id with the current message id
+                last_event_id = msg.id
+        except Exception as e:
+            # Print the exception and retry after a delay
+            print(e)
+            print("Retrying connection in 5 seconds...")
+            time.sleep(5)
 
 # Variables for use in the size() function.
 KB = float(1024)
