@@ -32,7 +32,7 @@ def sse_loop(url):
             messages = sseclient.SSEClient(url, retry=5000)
             # Iterate over the messages
             for msg in messages:
-                print(json.loads(msg.data))
+                # print(json.loads(msg.data))
                 # Put the message data into the queue
                 message_queue.put(msg.data)
                 # Check if the stop event is set
@@ -59,7 +59,8 @@ def closewin(event):
     # Set the stop event to True
     stop_event.set()
     # Wait for the thread to join
-    sse_thread.join()
+    if sse_thread.is_alive():
+        sse_thread.join()
     # Destroy the window
     window.destroy()
 
@@ -112,7 +113,7 @@ def update():
     if not message_queue.empty():
         # Get the message data from the queue
         msg_data = message_queue.get()
-        print(json.loads(msg_data))
+        # print(json.loads(msg_data))
         parse_json = json.loads(msg_data)
         upload = parse_json[0]
         download = parse_json[1]
