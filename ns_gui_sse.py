@@ -6,14 +6,16 @@ import tkinter as tk
 # import requests
 import json
 import sseclient
-url = "http://localhost:6798/stream"
-# from sseclient import SSEClient
 import threading
 import queue
+url = "http://localhost:6798/stream"
+# from sseclient import SSEClient
+
 # Create a global queue to store messages from SSEClient
 message_queue = queue.Queue()
 # Create a global event to signal the thread to stop or continue
 stop_event = threading.Event()
+
 
 def sse_loop(url):
     # This function runs on a separate thread and handles SSE
