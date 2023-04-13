@@ -4,6 +4,7 @@
 import tkinter as tk
 import requests
 import json
+# import socket
 
 # Variables for use in the size() function.
 KB = float(1024)
@@ -66,6 +67,14 @@ def update():
         # print("started trying")
         response_API = requests.get('http://localhost:6798/',timeout = 0.0000000001)
         data = response_API.text
+        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # sock.connect(("127.0.0.1", 6798))
+        # sock.send(b"GET / HTTP/1.1\r\n\r\n")
+        # response = sock.recv(4096)
+        # sock.close()
+        # data = response.decode('utf-8') 
+        # print(response.decode('utf-8'))
+        # sock.close()
         parse_json = json.loads(data)
         upload = parse_json[0]
         download = parse_json[1]
@@ -95,10 +104,10 @@ def update():
         label_total_usage.grid(row=0, column=2)
         # raise SystemExit(e)
         # window.update()
-        #print("test")
+        # print("test")
     window.after(REFRESH_DELAY, update)  # reschedule event in refresh delay.
 
-#print("test")
+# print("test")
 window.after(REFRESH_DELAY, update)
 
 window.overrideredirect(True)
