@@ -23,6 +23,7 @@ def sse_loop(url):
     last_event_id = None
     # Use a while loop to recheck for SSE connections until the window is closed
     while True:
+        print("in this loop#1")
         # Check if the stop event is set
         if stop_event.is_set():
             # Break out of the loop and stop the thread
@@ -55,12 +56,12 @@ TB = float(KB ** 4)  # 1,099,511,627,776
 
 
 def closewin(event):
-    print("attempting to end thread")
+    # print("attempting to end thread")
     # Set the stop event to True
     stop_event.set()
     # Wait for the thread to join
-    if sse_thread.is_alive():
-        sse_thread.join()
+    # if sse_thread.is_alive():
+    #     sse_thread.join()
     # Destroy the window
     window.destroy()
 
@@ -111,6 +112,7 @@ label_total_usage.grid(row=0, column=2)
 def update():
     global last_upload, last_download, upload_speed, down_speed
     if not message_queue.empty():
+        print("in this loop#2")
         # Get the message data from the queue
         msg_data = message_queue.get()
         # print(json.loads(msg_data))
@@ -148,6 +150,7 @@ def update():
     window.after(REFRESH_DELAY, update)  # reschedule event in refresh delay.
 # Create a new thread to run the sse_loop function with the url argument
 sse_thread = threading.Thread(target=sse_loop, args=(url,))
+sse_thread.daemon=True
 # Start the thread
 sse_thread.start()
 #print("test")
