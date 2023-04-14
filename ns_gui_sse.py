@@ -111,10 +111,15 @@ label_total_usage.grid(row=0, column=2)
 # Updating Labels
 def update():
     global last_upload, last_download, upload_speed, down_speed
-    if not message_queue.empty():
-        print("in this loop#2")
-        # Get the message data from the queue
-        msg_data = message_queue.get()
+    try:
+        # Get the message data from the queue with a timeout of 1 second
+        msg_data = message_queue.get(timeout=1)
+    except queue.Empty:
+        # Handle the case when the queue is empty
+        label_total_usage[
+            "text"] = f'Pls ensure that ns_daemon is running on your machine by browsing http://localhost:6798/ from your browser.'
+        label_total_usage.grid(row=0, column=2)
+    else:
         # print(json.loads(msg_data))
         parse_json = json.loads(msg_data)
         upload = parse_json[0]
@@ -139,14 +144,7 @@ def update():
         # {} {}↑ {}
         label_total_usage["text"] = f'{size(down_speed,False)}ps↓ {size(upload_speed,False)}ps↑ {size(todaytotal,True)}'
         label_total_usage.grid(row=0, column=2)
-       
-    else:
-        # print(e)
-        label_total_usage["text"] = f'Pls ensure that ns_daemon is running on your machine by browsing http://localhost:6798/ from your browser.'
-        label_total_usage.grid(row=0, column=2)
-        # raise SystemExit(e)
-        # window.update()
-        #print("test")
+
     window.after(REFRESH_DELAY, update)  # reschedule event in refresh delay.
 # Create a new thread to run the sse_loop function with the url argument
 sse_thread = threading.Thread(target=sse_loop, args=(url,))
